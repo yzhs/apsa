@@ -74,7 +74,7 @@ func main() {
 				os.Exit(0)
 			}
 		}
-		cmd := exec.Command("firefox", "http://localhost/apsa/search?q=" +
+		cmd := exec.Command("firefox", "http://localhost/apsa/search?q="+
 			strings.Join(os.Args[i:], " "))
 		TryLogError(cmd.Run())
 	}

@@ -54,7 +54,7 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 
 // Serve the search page.
 func mainHandler(w http.ResponseWriter, r *http.Request) {
-	html, err := loadHtmlTemplate("main")
+	html, err := loadHTMLTemplate("main")
 	if err != nil {
 		fmt.Fprintf(w, "%v", err)
 		return
@@ -62,7 +62,7 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, string(html))
 }
 
-func loadHtmlTemplate(name string) ([]byte, error) {
+func loadHTMLTemplate(name string) ([]byte, error) {
 	return ioutil.ReadFile(Config.TemplateDirectory + name + ".html")
 }
 
@@ -83,13 +83,12 @@ func renderTemplate(w http.ResponseWriter, templateName string, resultData resul
 		"link": func(x string) template.HTML {
 			if strings.HasPrefix(x, "http://") || strings.HasPrefix(x, "https://") {
 				return template.HTML("<a href=\"" + x + "\">" + x + "</a>")
-			} else {
-				return template.HTML(template.HTMLEscapeString(x))
 			}
+			return template.HTML(template.HTMLEscapeString(x))
 		},
 	}
-	tmplFile := Config.TemplateDirectory + templateName + ".html";
-	t, err := template.New(templateName+".html").Funcs(funcMap).ParseFiles(tmplFile)
+	tmplFile := Config.TemplateDirectory + templateName + ".html"
+	t, err := template.New(templateName + ".html").Funcs(funcMap).ParseFiles(tmplFile)
 	if err != nil {
 		fmt.Fprintf(w, "Error: %v", err)
 		return

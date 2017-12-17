@@ -27,7 +27,7 @@ import (
 	"github.com/russross/blackfriday"
 )
 
-var NoSuchRecipeError = errors.New("No such recipe")
+var ErrNoSuchRecipe = errors.New("No such recipe")
 
 const hashes = "############################################################"
 
@@ -48,7 +48,7 @@ func (e *errTemplateReader) readTemplate(name string) {
 }
 
 func writeRecipe(id Id, html []byte) error {
-	return ioutil.WriteFile(Config.CacheDirectory + string(id) + ".html", html, 0644)
+	return ioutil.WriteFile(Config.CacheDirectory+string(id)+".html", html, 0644)
 }
 
 func runPandoc(id Id) error {
@@ -70,7 +70,7 @@ func runPandoc(id Id) error {
 	return writeRecipe(id, output)
 }
 
-func recipeToHtmlSnippet(id Id) error {
+func recipeToHTMLSnippet(id Id) error {
 	runPandoc(id)
 	// TODO generate HTML file
 	return nil
@@ -82,7 +82,7 @@ func ProcessRecipe(id Id) error {
 		return nil
 	}
 
-	return recipeToHtmlSnippet(id)
+	return recipeToHTMLSnippet(id)
 }
 
 // Generate images for a list of recipes.
@@ -92,12 +92,12 @@ func ProcessRecipes(ids []Recipe) int {
 	for _, foo := range ids {
 		id := foo.Id
 		err := ProcessRecipe(id)
-		if err == NoSuchRecipeError {
+		if err == ErrNoSuchRecipe {
 			continue
 		} else if err != nil {
 			log.Panic("An error ocurred when processing recipe ", id, ": ", err)
 		} else {
-			numRecipes += 1
+			numRecipes++
 		}
 	}
 
@@ -123,7 +123,7 @@ func RenderAllRecipes() int {
 				return
 			}
 			id := Id(strings.TrimSuffix(file.Name(), ".md"))
-			if err := ProcessRecipe(id); err != nil && err != NoSuchRecipeError {
+			if err := ProcessRecipe(id); err != nil && err != ErrNoSuchRecipe {
 				log.Printf("%s\nERROR\n%s\n%v\n%s\n", hashes, hashes, err, hashes)
 			}
 			ch <- 1

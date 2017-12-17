@@ -29,16 +29,16 @@ const (
 
 // Statistics concerning the size of the library.
 type Stats struct {
-	num_recipes int
-	file_size   int64
+	numRecipes int
+	fileSize   int64
 }
 
 func (s Stats) Num() int {
-	return s.num_recipes
+	return s.numRecipes
 }
 
 func (s Stats) Size() int64 {
-	return s.file_size
+	return s.fileSize
 }
 
 type Id string

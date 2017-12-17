@@ -27,7 +27,7 @@ func LogError(err interface{}) {
 	fmt.Fprintln(os.Stderr, err)
 }
 
-// If an error occurred, log it.
+// TryLogError logs an error if `err != nil`
 func TryLogError(err interface{}) {
 	if err != nil {
 		LogError(err)
@@ -83,7 +83,7 @@ var templatesModTime int64 = -1
 
 // All recognized template files
 // TODO Generate the list⁈
-var templateFiles []string = []string{"header.html", "footer.html"}
+var templateFiles = []string{"header.html", "footer.html"}
 
 // Check whether a given recipe has to be recompiled
 func isUpToDate(id Id) bool {
