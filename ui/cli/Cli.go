@@ -58,7 +58,8 @@ func main() {
 
 	switch {
 	case index:
-		GenerateIndex()
+		err := GenerateIndex()
+		TryLogError(err)
 	case stats:
 		printStats()
 	case version:
@@ -75,9 +76,6 @@ func main() {
 		}
 		cmd := exec.Command("firefox", "http://localhost/apsa/search?q=" +
 			strings.Join(os.Args[i:], " "))
-		err := cmd.Run()
-		if err != nil {
-			panic(err)
-		}
+		TryLogError(cmd.Run())
 	}
 }

@@ -94,7 +94,8 @@ func renderTemplate(w http.ResponseWriter, templateName string, resultData resul
 		fmt.Fprintf(w, "Error: %v", err)
 		return
 	}
-	t.ExecuteTemplate(w, templateName+".html", resultData)
+	err = t.ExecuteTemplate(w, templateName+".html", resultData)
+	TryLogError(err)
 }
 
 func min(a, b int) int {
@@ -170,5 +171,6 @@ func main() {
 	http.HandleFunc("/apsa.apsaedit", editHandler)
 	serveDirectory("/images/", Config.CacheDirectory)
 	serveDirectory("/static/", Config.TemplateDirectory+"static")
-	http.ListenAndServe("127.0.0.1:61707", nil)
+	err := http.ListenAndServe("0.0.0.0:61707", nil)
+	TryLogError(err)
 }

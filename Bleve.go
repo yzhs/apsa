@@ -106,9 +106,11 @@ func GenerateIndex() error {
 		content := string(contentBytes)
 		recipe := Parse(id, content)
 
-		batch.Index(id, recipe)
+		err = batch.Index(id, recipe)
+		TryLogError(err)
 	}
-	index.Batch(batch)
+	err = index.Batch(batch)
+	TryLogError(err)
 
 	return nil
 }
