@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"html/template"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"os"
 	"runtime/pprof"
@@ -30,6 +31,8 @@ import (
 
 	. "github.com/yzhs/apsa"
 )
+
+const SOCKET_PATH = "/tmp/apsa.sock"
 
 // Generate a HTML file describing the size of the library.
 func printStats() string {
@@ -170,6 +173,17 @@ func main() {
 	http.HandleFunc("/apsa.apsaedit", editHandler)
 	serveDirectory("/images/", Config.CacheDirectory)
 	serveDirectory("/static/", Config.TemplateDirectory+"static")
-	err := http.ListenAndServe("0.0.0.0:61707", nil)
+	server := http.Server{}
+
+	listener, err := net.Listen("unix", SOCKET_PATH)
+	if err != nil {
+		LogError(err)
+		return
+	}
+	defer listener.Close()
+	os.Chmod(SOCKET_PATH, 0777)
+
+	err = server.Serve(listener)
 	TryLogError(err)
+	os.Remove(SOCKET_PATH)
 }
