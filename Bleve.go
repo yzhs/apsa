@@ -139,7 +139,7 @@ func searchBleve(queryString string) (Results, error) {
 	defer index.Close()
 
 	newQueryString := ""
-	for _, tmp := range strings.Split(queryString, " ") {
+	for _, tmp := range strings.Split(strings.TrimSpace(queryString), " ") {
 		word := strings.TrimSpace(tmp)
 		if word[0] == '-' || word[0] == '+' {
 			newQueryString += " " + word
