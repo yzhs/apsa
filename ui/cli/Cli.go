@@ -58,7 +58,7 @@ func main() {
 
 	switch {
 	case index:
-		err := GenerateIndex()
+		err := RebuildIndex()
 		TryLogError(err)
 	case stats:
 		printStats()
@@ -74,8 +74,10 @@ func main() {
 				os.Exit(0)
 			}
 		}
-		cmd := exec.Command("firefox", "http://localhost/apsa/search?q="+
-			strings.Join(os.Args[i:], " "))
+		cmd := exec.Command(
+			"firefox", "http://localhost/apsa/search?q="+
+				strings.Join(os.Args[i:], " "),
+		)
 		TryLogError(cmd.Run())
 	}
 }

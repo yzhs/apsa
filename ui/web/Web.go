@@ -133,8 +133,10 @@ func queryHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		results.Ids[i].HTML = template.HTML(tmp)
 	}
-	data := result{Query: query, NumMatches: numMatches, Matches: results.Ids[:min(20, numMatches)],
-		TotalMatches: results.Total}
+	data := result{
+		Query: query, NumMatches: numMatches, Matches: results.Ids[:min(20, numMatches)],
+		TotalMatches: results.Total,
+	}
 	renderTemplate(w, "search", data)
 }
 
@@ -160,7 +162,7 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
-	// TODO run GenerateIndex() when there is something new
+	// TODO run RebuildIndex() when there is something new
 
 	if version {
 		fmt.Println(NAME, VERSION)

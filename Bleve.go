@@ -34,44 +34,18 @@ func touch(file string) error {
 	return os.Chtimes(file, now, now)
 }
 
-// Run index++ to generate a (new) swish++ index file.
-func GenerateIndex() error {
+// RebuildIndex generates a new index or updates the documents in an existing one.
+func RebuildIndex() error {
 	// TODO handle multiple fields, i.e. the main text, @source, @type, tags, etc.
 	newIndex := false
+
 	// Try to open an existing index or create a new one if none exists.
 	index, err := openIndex()
 	if err != nil {
-		enTextMapping := bleve.NewTextFieldMapping()
-		enTextMapping.Analyzer = "en"
-
-		simpleMapping := bleve.NewTextFieldMapping()
-		simpleMapping.Analyzer = simple.Name
-
-		typeMapping := bleve.NewTextFieldMapping()
-		typeMapping.Analyzer = keyword.Name
-
-		recipeMapping := bleve.NewDocumentMapping()
-		recipeMapping.AddFieldMappingsAt("id", simpleMapping)
-		recipeMapping.AddFieldMappingsAt("content", enTextMapping)
-		recipeMapping.AddFieldMappingsAt("source", simpleMapping)
-		recipeMapping.AddFieldMappingsAt("tag", simpleMapping)
-
-		mapping := bleve.NewIndexMapping()
-		mapping.DefaultAnalyzer = "en"
-		mapping.DefaultMapping = recipeMapping
-
-		index, err = bleve.New(Config.ApsaDirectory+"bleve", mapping)
-		if err != nil {
-			panic(err)
-		}
+		index = createIndex()
 		newIndex = true
 	}
 	defer index.Close()
-
-	files, err := ioutil.ReadDir(Config.KnowledgeDirectory)
-	if err != nil {
-		return err
-	}
 
 	indexUpdateFile := Config.ApsaDirectory + "index_updated"
 	indexUpdateTime, err := getModTime(indexUpdateFile)
@@ -84,8 +58,11 @@ func GenerateIndex() error {
 			return nil
 		}
 	}
-	// Save the time of this indexing operation
-	_ = touch(Config.ApsaDirectory + "index_updated")
+
+	files, err := ioutil.ReadDir(Config.KnowledgeDirectory)
+	if err != nil {
+		return err
+	}
 
 	batch := index.NewBatch()
 	for _, file := range files {
@@ -112,6 +89,9 @@ func GenerateIndex() error {
 	err = index.Batch(batch)
 	TryLogError(err)
 
+	// Save the time of this indexing operation
+	_ = touch(Config.ApsaDirectory + "index_updated")
+
 	return nil
 }
 
@@ -124,9 +104,37 @@ func RemoveFromIndex(id Id) error {
 	return index.Delete(string(id))
 }
 
-// Open the bleve index
+// openIndex opens an existing index
 func openIndex() (bleve.Index, error) {
 	return bleve.Open(Config.ApsaDirectory + "bleve")
+}
+
+func createIndex() bleve.Index {
+	enTextMapping := bleve.NewTextFieldMapping()
+	enTextMapping.Analyzer = "en"
+
+	simpleMapping := bleve.NewTextFieldMapping()
+	simpleMapping.Analyzer = simple.Name
+
+	typeMapping := bleve.NewTextFieldMapping()
+	typeMapping.Analyzer = keyword.Name
+
+	recipeMapping := bleve.NewDocumentMapping()
+	recipeMapping.AddFieldMappingsAt("id", simpleMapping)
+	recipeMapping.AddFieldMappingsAt("content", enTextMapping)
+	recipeMapping.AddFieldMappingsAt("source", simpleMapping)
+	recipeMapping.AddFieldMappingsAt("tag", simpleMapping)
+
+	mapping := bleve.NewIndexMapping()
+	mapping.DefaultAnalyzer = "en"
+	mapping.DefaultMapping = recipeMapping
+
+	index, err := bleve.New(Config.ApsaDirectory+"bleve", mapping)
+	if err != nil {
+		panic(err)
+	}
+
+	return index
 }
 
 // Search the swish index for a given query.
@@ -173,7 +181,7 @@ func searchBleve(queryString string) (Results, error) {
 	return Results{ids[:len(searchResults.Hits)], int(searchResults.Total)}, nil
 }
 
-// Get a list of recipes matching the query.
+// FindRecipes return a list of all recipes matching the given query.
 func FindRecipes(query string) (Results, error) {
 	results, err := searchBleve(query)
 	if err != nil {
