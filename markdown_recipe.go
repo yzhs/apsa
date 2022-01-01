@@ -157,22 +157,6 @@ var ErrNoSuchRecipe = errors.New("No such recipe")
 
 const hashes = "############################################################"
 
-type errTemplateReader struct {
-	doc string
-	err error
-}
-
-// Load a template file from disk and propagate errors
-func (e *errTemplateReader) readTemplate(name string) {
-	if e.err != nil {
-		return
-	}
-
-	tmp, err := readTemplate(name)
-	e.err = err
-	e.doc += tmp
-}
-
 func writeRecipe(id Id, html []byte) error {
 	return ioutil.WriteFile(Config.CacheDirectory+string(id)+".html", html, 0644)
 }
