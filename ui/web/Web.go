@@ -164,7 +164,7 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
-	// TODO run RebuildIndex() when there is something new
+	// TODO run BuildIndex() when there is something new
 
 	if version {
 		fmt.Println(backend.NAME, backend.VERSION)

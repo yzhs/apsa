@@ -58,7 +58,7 @@ func main() {
 
 	switch {
 	case index:
-		err := RebuildIndex()
+		err := BuildIndex()
 		TryLogError(err)
 	case stats:
 		printStats()

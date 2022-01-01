@@ -34,8 +34,8 @@ func touch(file string) error {
 	return os.Chtimes(file, now, now)
 }
 
-// RebuildIndex generates a new index or updates the documents in an existing one.
-func RebuildIndex() error {
+// BuildIndex generates a new index or updates the documents in an existing one.
+func BuildIndex() error {
 	// TODO handle multiple fields, i.e. the main text, @source, @type, tags, etc.
 	newIndex := false
 
