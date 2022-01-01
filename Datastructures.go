@@ -27,17 +27,17 @@ const (
 	VERSION = "0.1"
 )
 
-// Statistics concerning the size of the library.
-type Stats struct {
+// statistics concerning the size of the library.
+type statistics struct {
 	numRecipes int
 	fileSize   int64
 }
 
-func (s Stats) Num() int {
+func (s statistics) Num() int {
 	return s.numRecipes
 }
 
-func (s Stats) Size() int64 {
+func (s statistics) Size() int64 {
 	return s.fileSize
 }
 

@@ -211,5 +211,5 @@ func ComputeStatistics() Statistics {
 		}
 	}
 
-	return Stats{num, size}
+	return statistics{num, size}
 }
