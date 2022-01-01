@@ -42,7 +42,7 @@ func (s statistics) Size() int64 {
 
 type Id string
 
-type Backend interface {
+type SearchEngine interface {
 	Search(query []string) ([]Id, error)
 	GenerateIndex() error
 	ComputeStatistics() Statistics
