@@ -153,7 +153,7 @@ func Parse(id, doc string) Recipe {
 
 // Rendering
 
-var ErrNoSuchRecipe = errors.New("No such recipe")
+var ErrNoSuchRecipe = errors.New("no such recipe found")
 
 const hashes = "############################################################"
 
