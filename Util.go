@@ -40,18 +40,6 @@ func readRecipe(id Id) (string, error) {
 	return string(result), err
 }
 
-// Load the content of a template file with the given name.
-func readTemplate(filename string) (string, error) {
-	result, err := ioutil.ReadFile(Config.TemplateDirectory + filename + ".html")
-	return string(result), err
-}
-
-// Write a HTML file with the given name and content to Apsa's temp
-// directory.
-func writeTemp(id Id, data string) error {
-	return ioutil.WriteFile(Config.TempDirectory+string(id)+".html", []byte(data), 0644)
-}
-
 // Compute the combined size of all files in a given directory.
 func getDirSize(dir string) (int, int64) {
 	directory, err := os.Open(dir)
@@ -84,39 +72,3 @@ var templatesModTime int64 = -1
 // All recognized template files
 // TODO Generate the list⁈
 var templateFiles = []string{"header.html", "footer.html"}
-
-// Check whether a given recipe has to be recompiled
-func isUpToDate(id Id) bool {
-	if templatesModTime == -1 {
-		// Check template for modification times
-		templatesModTime = 0
-
-		for _, file := range templateFiles {
-			foo, err := getModTime(Config.TemplateDirectory + file)
-			if err != nil {
-				break
-			}
-			if foo > templatesModTime {
-				templatesModTime = foo
-			}
-		}
-	}
-
-	info, err := os.Stat(Config.CacheDirectory + string(id) + ".html")
-	if err != nil {
-		return false
-	}
-	imageTime := info.ModTime().Unix()
-
-	if imageTime < templatesModTime {
-		return false
-	}
-
-	info, err = os.Stat(Config.KnowledgeDirectory + string(id) + ".md")
-	if err != nil {
-		return false // When in doubt, recompile
-	}
-	recipeTime := info.ModTime().Unix()
-
-	return imageTime > recipeTime
-}
