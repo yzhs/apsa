@@ -189,7 +189,7 @@ func (Bleve) Search(query string) (Results, error) {
 	if err != nil {
 		return Results{}, err
 	}
-	n := ProcessRecipes(results.Ids)
+	n := len(results.Ids)
 	ids := make([]Recipe, n)
 	i := 0
 	for _, id := range results.Ids {

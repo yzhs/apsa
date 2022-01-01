@@ -29,6 +29,7 @@ import (
 	"strings"
 
 	flag "github.com/ogier/pflag"
+	"github.com/russross/blackfriday"
 
 	backend "github.com/yzhs/apsa"
 )
@@ -98,12 +99,6 @@ func min(a, b int) int {
 	return a
 }
 
-// Load the rendered content of a given recipe from disk.
-func readRecipe(id backend.Id) (string, error) {
-	result, err := ioutil.ReadFile(backend.Config.CacheDirectory + string(id) + ".html")
-	return string(result), err
-}
-
 type Controller struct {
 	searchEngine backend.SearchEngine
 }
@@ -122,12 +117,12 @@ func (c Controller) queryHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	numMatches := len(results.Ids)
 
-	for i := range results.Ids {
-		tmp, err := readRecipe(results.Ids[i].Id)
+	for i, recipe := range results.Ids {
+		html := blackfriday.MarkdownCommon([]byte(recipe.Content))
 		if err != nil {
 			panic(err)
 		}
-		results.Ids[i].HTML = template.HTML(tmp)
+		results.Ids[i].HTML = template.HTML(html)
 	}
 	data := result{
 		Query: query, NumMatches: numMatches, Matches: results.Ids[:min(20, numMatches)],

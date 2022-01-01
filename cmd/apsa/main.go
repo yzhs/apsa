@@ -68,13 +68,8 @@ func main() {
 		fmt.Println(NAME, VERSION)
 	default:
 		i := 1
-		if len(os.Args) > 0 {
-			if os.Args[1] == "--" {
-				i += 1
-			} else if os.Args[1] == "all" {
-				fmt.Printf("Rendered all %d recipes.\n", RenderAllRecipes())
-				os.Exit(0)
-			}
+		if len(os.Args) > 0 && os.Args[1] == "--" {
+			i += 1
 		}
 		cmd := exec.Command(
 			"firefox", "http://localhost/apsa/search?q="+
