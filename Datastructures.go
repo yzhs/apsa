@@ -43,9 +43,9 @@ func (s statistics) Size() int64 {
 type Id string
 
 type SearchEngine interface {
-	Search(query []string) ([]Id, error)
 	BuildIndex() error
-	ComputeStatistics() Statistics
+	// Search(query []string) ([]Id, error)
+	//  ComputeStatistics() Statistics
 }
 
 type Renderer interface {
@@ -92,4 +92,8 @@ func InitConfig() {
 	Config.CacheDirectory = dir + "cache/"
 	Config.TemplateDirectory = dir + "templates/"
 	Config.TempDirectory = dir + "tmp/"
+}
+
+func CreateSearchEngine() SearchEngine {
+	return Bleve{}
 }

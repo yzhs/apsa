@@ -56,9 +56,11 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
+	searchEngine := CreateSearchEngine()
+
 	switch {
 	case index:
-		err := BuildIndex()
+		err := searchEngine.BuildIndex()
 		TryLogError(err)
 	case stats:
 		printStats()

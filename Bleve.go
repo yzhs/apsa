@@ -29,13 +29,15 @@ import (
 	"github.com/blevesearch/bleve/analysis/analyzer/simple"
 )
 
+type Bleve struct{}
+
 func touch(file string) error {
 	now := time.Now()
 	return os.Chtimes(file, now, now)
 }
 
 // BuildIndex generates a new index or updates the documents in an existing one.
-func BuildIndex() error {
+func (b Bleve) BuildIndex() error {
 	// TODO handle multiple fields, i.e. the main text, @source, @type, tags, etc.
 	newIndex := false
 
