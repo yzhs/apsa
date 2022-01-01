@@ -5,6 +5,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	. "github.com/yzhs/apsa"
 )
@@ -12,8 +13,20 @@ import (
 func main() {
 	InitConfig()
 
-	for _, arg := range os.Args {
-		file := arg
-		fmt.Println(file)
+	home, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
+	}
+
+	entries, err := os.ReadDir(fmt.Sprintf("%s/.apsa/library", home))
+	if err != nil {
+		panic(err)
+	}
+
+	for _, entry := range entries {
+		file := entry.Name()
+		if strings.HasSuffix(file, ".md") {
+			fmt.Println(file)
+		}
 	}
 }
