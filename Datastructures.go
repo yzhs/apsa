@@ -44,7 +44,7 @@ type Id string
 
 type SearchEngine interface {
 	BuildIndex() error
-	// Search(query []string) ([]Id, error)
+	Search(query string) (Results, error)
 	//  ComputeStatistics() Statistics
 }
 

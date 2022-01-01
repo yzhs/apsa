@@ -37,7 +37,7 @@ func touch(file string) error {
 }
 
 // BuildIndex generates a new index or updates the documents in an existing one.
-func (b Bleve) BuildIndex() error {
+func (Bleve) BuildIndex() error {
 	// TODO handle multiple fields, i.e. the main text, @source, @type, tags, etc.
 	newIndex := false
 
@@ -183,8 +183,8 @@ func searchBleve(queryString string) (Results, error) {
 	return Results{ids[:len(searchResults.Hits)], int(searchResults.Total)}, nil
 }
 
-// FindRecipes return a list of all recipes matching the given query.
-func FindRecipes(query string) (Results, error) {
+// Search return a list of all recipes matching the given query.
+func (Bleve) Search(query string) (Results, error) {
 	results, err := searchBleve(query)
 	if err != nil {
 		return Results{}, err

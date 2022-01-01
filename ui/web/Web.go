@@ -114,15 +114,19 @@ func readRecipe(id backend.Id) (string, error) {
 	return string(result), err
 }
 
+type Controller struct {
+	searchEngine backend.SearchEngine
+}
+
 // Handle a query and serve the results.
-func queryHandler(w http.ResponseWriter, r *http.Request) {
+func (c Controller) queryHandler(w http.ResponseWriter, r *http.Request) {
 	query := r.FormValue("q")
 	if query == "" {
 		mainHandler(w, r)
 		return
 	}
 
-	results, err := backend.FindRecipes(query)
+	results, err := c.searchEngine.Search(query)
 	if err != nil {
 		panic(err)
 	}
@@ -171,9 +175,11 @@ func main() {
 		return
 	}
 
+	controller := Controller{backend.CreateSearchEngine()}
+
 	http.HandleFunc("/", mainHandler)
 	http.HandleFunc("/stats", statsHandler)
-	http.HandleFunc("/search", queryHandler)
+	http.HandleFunc("/search", controller.queryHandler)
 	http.HandleFunc("/backend.apsaedit", editHandler)
 	serveDirectory("/images/", backend.Config.CacheDirectory)
 	serveDirectory("/static/", backend.Config.TemplateDirectory+"static")
