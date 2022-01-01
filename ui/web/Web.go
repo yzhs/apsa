@@ -150,7 +150,7 @@ func main() {
 	backend.Config.MaxResults = 20
 
 	if profile {
-		f, err := os.Create("backend.prof")
+		f, err := os.Create("apsa.prof")
 		if err != nil {
 			panic(err)
 		}
