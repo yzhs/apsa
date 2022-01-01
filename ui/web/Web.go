@@ -35,7 +35,7 @@ import (
 
 const SOCKET_PATH = "/tmp/apsa.sock"
 
-// Generate a HTML file describing the size of the library.
+// Generate an HTML file describing the size of the library.
 func printStats() string {
 	stats := backend.ComputeStatistics()
 	n := stats.Num()
