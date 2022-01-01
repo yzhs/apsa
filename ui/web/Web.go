@@ -65,11 +65,6 @@ func loadHTMLTemplate(name string) ([]byte, error) {
 	return ioutil.ReadFile(backend.Config.TemplateDirectory + name + ".html")
 }
 
-type match struct {
-	backend.Recipe
-	SourceURL template.HTML
-}
-
 type result struct {
 	Query        string
 	Matches      []backend.Recipe
