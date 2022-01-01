@@ -29,8 +29,8 @@ import (
 	. "github.com/yzhs/apsa"
 )
 
-func printStats() {
-	stats := ComputeStatistics()
+func printStats(s SearchEngine) {
+	stats := s.ComputeStatistics()
 	n := stats.Num()
 	size := float32(stats.Size()) / 1024.0
 	fmt.Printf("The library contains %v recipes with a total size of %.1f kiB.\n", n, size)
@@ -63,7 +63,7 @@ func main() {
 		err := searchEngine.BuildIndex()
 		TryLogError(err)
 	case stats:
-		printStats()
+		printStats(searchEngine)
 	case version:
 		fmt.Println(NAME, VERSION)
 	default:

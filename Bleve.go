@@ -204,7 +204,7 @@ func (Bleve) Search(query string) (Results, error) {
 	return results, nil
 }
 
-func ComputeStatistics() Statistics {
+func (Bleve) ComputeStatistics() Statistics {
 	index, err := openIndex()
 	if err != nil {
 		LogError(err)

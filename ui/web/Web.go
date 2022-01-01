@@ -35,17 +35,12 @@ import (
 
 const SOCKET_PATH = "/tmp/apsa.sock"
 
-// Generate an HTML file describing the size of the library.
-func printStats() string {
-	stats := backend.ComputeStatistics()
+// Send the statistics page to the client.
+func (c Controller) statsHandler(w http.ResponseWriter, r *http.Request) {
+	stats := c.searchEngine.ComputeStatistics()
 	n := stats.Num()
 	size := float32(stats.Size()) / 1024.0
-	return fmt.Sprintf("The library contains %v recipes with a total size of %.1f kiB.\n", n, size)
-}
-
-// Send the statistics page to the client.
-func statsHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, printStats())
+	fmt.Fprintf(w, "The library contains %v recipes with a total size of %.1f kiB.\n", n, size)
 }
 
 // Handle the edit-link, causing the browser to open that recipe in an editor.
@@ -178,7 +173,7 @@ func main() {
 	controller := Controller{backend.CreateSearchEngine()}
 
 	http.HandleFunc("/", mainHandler)
-	http.HandleFunc("/stats", statsHandler)
+	http.HandleFunc("/stats", controller.statsHandler)
 	http.HandleFunc("/search", controller.queryHandler)
 	http.HandleFunc("/backend.apsaedit", editHandler)
 	serveDirectory("/images/", backend.Config.CacheDirectory)
