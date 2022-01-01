@@ -68,7 +68,6 @@ type Configuration struct {
 
 	ApsaDirectory      string
 	KnowledgeDirectory string
-	CacheDirectory     string
 	TemplateDirectory  string
 	TempDirectory      string
 }
@@ -89,7 +88,6 @@ func InitConfig() {
 
 	Config.ApsaDirectory = dir
 	Config.KnowledgeDirectory = dir + "library/"
-	Config.CacheDirectory = dir + "cache/"
 	Config.TemplateDirectory = dir + "templates/"
 	Config.TempDirectory = dir + "tmp/"
 }
