@@ -1,6 +1,7 @@
-all: install cli web
+all: cli web
 
-lib: Bleve.go Datastructures.go Render.go Parse.go Util.go
+lib: Bleve.go Datastructures.go markdown_recipe.go modernist_recipe.go Util.go
+	go build
 
 cli: lib ui/cli/Cli.go
 	cd ui/cli && go build
