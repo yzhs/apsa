@@ -18,7 +18,6 @@
 package apsa
 
 import (
-	"html/template"
 	"os"
 )
 
@@ -72,24 +71,6 @@ type Configuration struct {
 	CacheDirectory     string
 	TemplateDirectory  string
 	TempDirectory      string
-}
-
-type Recipe struct {
-	Id                   Id            `json:"id"`
-	Title                string        `json:"titel"`
-	Source               string        `json:"quelle"`
-	PreparationTime      string        `json:"zubereitungszeit"`
-	BakingTime           string        `json:"backzeit"`
-	CookingTime          string        `json:"kochzeit"`
-	WaitingTime          string        `json:"wartezeit"`
-	TotalTime            string        `json:"gesamtzeit"`
-	FanTemp              string        `json:"umluft"`
-	TopAndBottomHeatTemp string        `json:"oberuntunterhitze"`
-	Ingredients          []string      `json:"zutaten"`
-	Portions             string        `json:"portionen"`
-	Content              string        `json:"inhalt"`
-	Tags                 []string      `json:"tag"`
-	HTML                 template.HTML `json:""`
 }
 
 type Results struct {
