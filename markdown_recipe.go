@@ -197,8 +197,7 @@ func runPandoc(id Id) error {
 }
 
 func recipeToHTMLSnippet(id Id) error {
-	runPandoc(id)
-	return nil
+	return runPandoc(id)
 }
 
 // ProcessRecipe generates a HTML snippet from a given recipe whenever necessary.
