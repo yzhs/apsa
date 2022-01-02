@@ -77,11 +77,20 @@ func Parse(id, doc string) Recipe {
 	lines := strings.Split(doc, "\n")
 	title, metadata, otherLines := extractMetadata(lines)
 
-	content := strings.Join(otherLines, "\n")
+	for len(otherLines) > 0 && (strings.TrimSpace(otherLines[0]) == "" || strings.Contains(otherLines[0], "Zutaten:")) {
+		otherLines = otherLines[1:]
+	}
+
+	ingredients, lastIngredientLine := extractIngredients(otherLines)
+
+	instructions := ""
+	if lastIngredientLine < len(otherLines)-1 {
+		instructions = strings.Join(otherLines[lastIngredientLine+1:], "\n")
+	}
 
 	return Recipe{
 		Id:       Id(id),
-		Content:  content,
+		Content:  instructions,
 		Title:    title,
 		Portions: metadata["Portionen"],
 		Source:   metadata["Quelle"],
@@ -95,7 +104,26 @@ func Parse(id, doc string) Recipe {
 
 		FanTemp:              metadata["Umfluft"],
 		TopAndBottomHeatTemp: metadata["Ober- und Unterhitze"],
+		Ingredients:          ingredients,
 	}
+}
+
+func extractIngredients(otherLines []string) ([]string, int) {
+	ingredients := make([]string, 0, 10)
+	lastIngredientLine := 0
+	for i, line_ := range otherLines {
+		line := strings.TrimSpace(line_)
+		if strings.HasPrefix(line, "##") {
+			// Multipart recipes are not handled properly at the moment
+			return make([]string, 0), -1
+		}
+
+		if strings.HasPrefix(line, "* ") {
+			ingredients = append(ingredients, line[2:])
+			lastIngredientLine = i
+		}
+	}
+	return ingredients, lastIngredientLine
 }
 
 func extractMetadata(lines []string) (string, map[string]string, []string) {
