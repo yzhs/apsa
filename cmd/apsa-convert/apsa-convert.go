@@ -7,11 +7,11 @@ import (
 	"os"
 	"strings"
 
-	. "github.com/yzhs/apsa"
+	"github.com/yzhs/apsa"
 )
 
 func main() {
-	InitConfig()
+	apsa.InitConfig()
 
 	home, err := os.UserHomeDir()
 	if err != nil {
