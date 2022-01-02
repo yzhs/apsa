@@ -75,6 +75,30 @@ func hasPrefix(needle string, haystack string) bool {
 //	Zubereitung...
 func Parse(id, doc string) Recipe {
 	lines := strings.Split(doc, "\n")
+	title, metadata, otherLines := extractMetadata(lines)
+
+	content := strings.Join(otherLines, "\n")
+
+	return Recipe{
+		Id:       Id(id),
+		Content:  content,
+		Title:    title,
+		Portions: metadata["Portionen"],
+		Source:   metadata["Quelle"],
+		Tags:     parseTags(metadata["Tags"]),
+
+		CookingTime:     metadata["Kochzeit"],
+		BakingTime:      metadata["Backzeit"],
+		WaitingTime:     metadata["Wartezeit"],
+		TotalTime:       metadata["Gesamtzeit"],
+		PreparationTime: metadata["Zubereitungszeit"],
+
+		FanTemp:              metadata["Umfluft"],
+		TopAndBottomHeatTemp: metadata["Ober- und Unterhitze"],
+	}
+}
+
+func extractMetadata(lines []string) (string, map[string]string, []string) {
 	var otherLines []string
 	data := make(map[string]string)
 
@@ -106,24 +130,5 @@ func Parse(id, doc string) Recipe {
 			otherLines = append(otherLines, line)
 		}
 	}
-	content := strings.Join(otherLines, "\n")
-
-	return Recipe{
-		Id:       Id(id),
-		Content:  content,
-		Title:    title,
-		Portions: data["Portionen"],
-		Source:   data["Quelle"],
-		Tags:     parseTags(data["Tags"]),
-
-		CookingTime:     data["Kochzeit"],
-		BakingTime:      data["Backzeit"],
-		WaitingTime:     data["Wartezeit"],
-		TotalTime:       data["Gesamtzeit"],
-		PreparationTime: data["Zubereitungszeit"],
-
-		FanTemp:              data["Umfluft"],
-		TopAndBottomHeatTemp: data["Ober- und Unterhitze"],
-		// TODO ingredients
-	}
+	return title, data, otherLines
 }
