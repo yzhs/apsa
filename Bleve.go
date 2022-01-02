@@ -177,12 +177,14 @@ func (Bleve) Search(query string) (Results, error) {
 	i := 0
 	for _, id := range results.Ids {
 		if _, err := os.Stat(Config.KnowledgeDirectory + string(id.Id) + ".md"); os.IsNotExist(err) {
+			RemoveFromIndex(id.Id)
 			continue
 		}
-		ids[i] = Recipe{Id: id.Id}
+		ids[i] = id
 		i += 1
 	}
 	results.Total = n // The number of hits can be wrong if recipes have been deleted
+	results.Ids = ids
 
 	return results, nil
 }
