@@ -148,7 +148,7 @@ func main() {
 	http.HandleFunc("/", mainHandler)
 	http.HandleFunc("/stats", controller.statsHandler)
 	http.HandleFunc("/search", controller.queryHandler)
-	http.HandleFunc("/backend.apsaedit", editHandler)
+	http.HandleFunc("/apsa.apsaedit", editHandler)
 	serveDirectory("/static/", backend.Config.TemplateDirectory+"static")
 	server := http.Server{}
 
