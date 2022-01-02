@@ -9,10 +9,10 @@ import (
 
 	flag "github.com/ogier/pflag"
 
-	. "github.com/yzhs/apsa"
+	"github.com/yzhs/apsa"
 )
 
-func printStats(s SearchEngine) {
+func printStats(s apsa.SearchEngine) {
 	stats := s.ComputeStatistics()
 	n := stats.Num()
 	size := float32(stats.Size()) / 1024.0
@@ -27,8 +27,8 @@ func main() {
 	flag.BoolVar(&profile, "profile", false, "\tEnable profiler")
 	flag.Parse()
 
-	InitConfig()
-	Config.MaxResults = 1e9
+	apsa.InitConfig()
+	apsa.Config.MaxResults = 1e9
 
 	if profile {
 		f, err := os.Create("apsa.prof")
@@ -39,16 +39,16 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 
-	searchEngine := CreateSearchEngine()
+	searchEngine := apsa.NewSearchEngine()
 
 	switch {
 	case index:
 		err := searchEngine.BuildIndex()
-		TryLogError(err)
+		apsa.TryLogError(err)
 	case stats:
 		printStats(searchEngine)
 	case version:
-		fmt.Println(NAME, VERSION)
+		fmt.Println(apsa.NAME, apsa.VERSION)
 	default:
 		i := 1
 		if len(os.Args) > 0 && os.Args[1] == "--" {
@@ -58,6 +58,6 @@ func main() {
 			"firefox", "http://localhost/apsa/search?q="+
 				strings.Join(os.Args[i:], " "),
 		)
-		TryLogError(cmd.Run())
+		apsa.TryLogError(cmd.Run())
 	}
 }

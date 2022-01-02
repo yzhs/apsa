@@ -143,7 +143,7 @@ func main() {
 		return
 	}
 
-	controller := Controller{backend.CreateSearchEngine()}
+	controller := Controller{backend.NewSearchEngine()}
 
 	http.HandleFunc("/", mainHandler)
 	http.HandleFunc("/stats", controller.statsHandler)

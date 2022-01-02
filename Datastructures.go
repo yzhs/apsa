@@ -75,6 +75,6 @@ func InitConfig() {
 	Config.TempDirectory = dir + "tmp/"
 }
 
-func CreateSearchEngine() SearchEngine {
+func NewSearchEngine() SearchEngine {
 	return Bleve{}
 }
