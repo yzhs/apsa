@@ -41,33 +41,31 @@ func parseTags(line string) []string {
 // generally of the following form:
 //
 //	# Titel
-//	Sprache: de
 //	Quelle: http://...
 //	Backzeit: 23 min
 //	Wartezeit: 15 min
 //	Zubereitungszeit: 2h + 5min
-//	Temperatur:
-//		- Ober- und Unterhitze: 200
-//		- Umluft: 180
+//	Ober- und Unterhitze: 200
+//	Umluft: 180
 //	Tags: Gemüse, lecker, gesund
 //	Portionen: 4
 //	## Teilrezept 1
 //	Zutaten:
-//		- 1 Rotkohl
-//		- 2 EL Zucker
-//		- Salz
+//	* 1 Rotkohl
+//	* 2 EL Zucker
+//	* Salz
 //	Zubereitung...
 //
 //	## Teilrezept 2
-//		- Rosinen
-//		- Schokopudding
+//	* Rosinen
+//	* Schokopudding
 //	Zubereitung...
 //
 // oder
 //	[...]
 //	Portionen: 4
 //	Zutaten:
-//		- Wasser
+//	* Wasser
 //	Zubereitung...
 func Parse(id, doc string) Recipe {
 	lines := strings.Split(doc, "\n")
