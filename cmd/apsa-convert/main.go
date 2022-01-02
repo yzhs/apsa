@@ -1,5 +1,3 @@
-// Package converter contains a converter from old-style to new style YAML-based
-// recipe files.
 package main
 
 import (
