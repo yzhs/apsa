@@ -5,6 +5,9 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"text/template"
+
+	"github.com/Masterminds/sprig"
 
 	"github.com/yzhs/apsa"
 )
@@ -37,6 +40,28 @@ func main() {
 		recipe := apsa.Parse(file[:len(file)-3], string(fileContent))
 		if len(recipe.Ingredients) == 0 {
 			fmt.Printf("Could not parse ingredients for recipe '%s' (%s)\n", recipe.Title, recipe.Id)
+			continue
 		}
+
+		tmpl := template.Must(template.New("template.yaml").Funcs(sprig.TxtFuncMap()).Parse(Template))
+		tmpl.Execute(os.Stdout, recipe)
+		break
 	}
 }
+
+const Template = `title: {{ .Title }}
+portions: {{ .Portions }}
+source: {{ .Source }}
+tags:
+  {{- range .Tags }}
+  - {{ . }}
+  {{- end }}
+
+steps:
+- ingredients:
+  {{- range .Ingredients }}
+  - {{ . }}
+  {{- end }}
+  instructions: |
+    {{- .Content | indent 4 }}
+`
