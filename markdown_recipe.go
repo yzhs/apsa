@@ -37,10 +37,6 @@ func parseTags(line string) []string {
 	return tags
 }
 
-func hasPrefix(needle string, haystack string) bool {
-	return strings.HasPrefix(strings.ToLower(needle), strings.ToLower(haystack))
-}
-
 // Parse the tags in the given recipe content.  The format of a recipe is
 // generally of the following form:
 //
