@@ -17,7 +17,7 @@ import (
 	backend "github.com/yzhs/apsa"
 )
 
-const SOCKET_PATH = "/tmp/apsa.sock"
+const SocketPath = "/tmp/apsa.sock"
 
 // Send the statistics page to the client.
 func (c Controller) statsHandler(w http.ResponseWriter, r *http.Request) {
@@ -152,15 +152,15 @@ func main() {
 	serveDirectory("/static/", backend.Config.TemplateDirectory+"static")
 	server := http.Server{}
 
-	listener, err := net.Listen("unix", SOCKET_PATH)
+	listener, err := net.Listen("unix", SocketPath)
 	if err != nil {
 		backend.LogError(err)
 		return
 	}
 	defer listener.Close()
-	os.Chmod(SOCKET_PATH, 0777)
+	os.Chmod(SocketPath, 0777)
 
 	err = server.Serve(listener)
 	backend.TryLogError(err)
-	os.Remove(SOCKET_PATH)
+	os.Remove(SocketPath)
 }
