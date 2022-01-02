@@ -4,6 +4,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strings"
 
@@ -18,15 +19,24 @@ func main() {
 		panic(err)
 	}
 
-	entries, err := os.ReadDir(fmt.Sprintf("%s/.apsa/library", home))
+	libraryDir := fmt.Sprintf("%s/.apsa/library", home)
+	entries, err := os.ReadDir(libraryDir)
 	if err != nil {
 		panic(err)
 	}
 
 	for _, entry := range entries {
 		file := entry.Name()
-		if strings.HasSuffix(file, ".md") {
-			fmt.Println(file)
+		if !strings.HasSuffix(file, ".md") {
+			continue
 		}
+		id := file[:len(file)-3]
+		fmt.Printf("Parsing recipe %s...\n", id)
+		fileContent, err := ioutil.ReadFile(libraryDir + "/" + file)
+		if err != nil {
+			panic(err)
+		}
+		recipe := apsa.Parse(file[:len(file)-3], string(fileContent))
+		fmt.Println(recipe.Title)
 	}
 }
