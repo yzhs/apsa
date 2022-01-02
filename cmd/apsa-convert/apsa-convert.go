@@ -30,13 +30,15 @@ func main() {
 		if !strings.HasSuffix(file, ".md") {
 			continue
 		}
-		id := file[:len(file)-3]
-		fmt.Printf("Parsing recipe %s...\n", id)
+
 		fileContent, err := ioutil.ReadFile(libraryDir + "/" + file)
 		if err != nil {
 			panic(err)
 		}
+
 		recipe := apsa.Parse(file[:len(file)-3], string(fileContent))
-		fmt.Println(recipe.Title)
+		if len(recipe.Ingredients) == 0 {
+			fmt.Printf("Could not parse ingredients for recipe '%s' (%s)\n", recipe.Title, recipe.Id)
+		}
 	}
 }
