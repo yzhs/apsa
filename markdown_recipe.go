@@ -104,24 +104,6 @@ func Parse(id, doc string) Recipe {
 	}
 }
 
-func extractIngredients(otherLines []string) ([]string, int) {
-	ingredients := make([]string, 0, 10)
-	lastIngredientLine := 0
-	for i, line_ := range otherLines {
-		line := strings.TrimSpace(line_)
-		if strings.HasPrefix(line, "##") {
-			// Multipart recipes are not handled properly at the moment
-			return make([]string, 0), -1
-		}
-
-		if strings.HasPrefix(line, "* ") {
-			ingredients = append(ingredients, line[2:])
-			lastIngredientLine = i
-		}
-	}
-	return ingredients, lastIngredientLine
-}
-
 func extractMetadata(lines []string) (string, map[string]string, []string) {
 	var otherLines []string
 	data := make(map[string]string)
@@ -155,4 +137,22 @@ func extractMetadata(lines []string) (string, map[string]string, []string) {
 		}
 	}
 	return title, data, otherLines
+}
+
+func extractIngredients(otherLines []string) ([]string, int) {
+	ingredients := make([]string, 0, 10)
+	lastIngredientLine := 0
+	for i, line_ := range otherLines {
+		line := strings.TrimSpace(line_)
+		if strings.HasPrefix(line, "##") {
+			// Multipart recipes are not handled properly at the moment
+			return make([]string, 0), -1
+		}
+
+		if strings.HasPrefix(line, "* ") {
+			ingredients = append(ingredients, line[2:])
+			lastIngredientLine = i
+		}
+	}
+	return ingredients, lastIngredientLine
 }
