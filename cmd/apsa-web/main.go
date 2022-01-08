@@ -49,22 +49,23 @@ func loadHTMLTemplate(name string) ([]byte, error) {
 	return ioutil.ReadFile(backend.Config.TemplateDirectory + name + ".html")
 }
 
-type result struct {
+type Result struct {
 	Query        string
 	Matches      []backend.Recipe
 	NumMatches   int
 	TotalMatches int
 }
 
-func renderTemplate(w io.Writer, templateName string, resultData result) {
-	funcMap := template.FuncMap{
-		"link": func(x string) template.HTML {
-			if strings.HasPrefix(x, "http://") || strings.HasPrefix(x, "https://") {
-				return template.HTML("<a href=\"" + x + "\">" + x + "</a>")
-			}
-			return template.HTML(template.HTMLEscapeString(x))
-		},
-	}
+var funcMap = template.FuncMap{
+	"link": func(x string) template.HTML {
+		if strings.HasPrefix(x, "http://") || strings.HasPrefix(x, "https://") {
+			return template.HTML("<a href=\"" + x + "\">" + x + "</a>")
+		}
+		return template.HTML(template.HTMLEscapeString(x))
+	},
+}
+
+func renderTemplate(w io.Writer, templateName string, resultData Result) {
 	tmplFile := backend.Config.TemplateDirectory + templateName + ".html"
 	t, err := template.New(templateName + ".html").Funcs(funcMap).ParseFiles(tmplFile)
 	if err != nil {
@@ -107,7 +108,7 @@ func (c Controller) queryHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		results.Ids[i].HTML = template.HTML(html)
 	}
-	data := result{
+	data := Result{
 		Query: query, NumMatches: numMatches, Matches: results.Ids[:min(20, numMatches)],
 		TotalMatches: results.Total,
 	}
