@@ -22,6 +22,21 @@ type Step struct {
 	Ingredients  []string `yaml:"ingredients"`
 }
 
+func FromRecipe(recipe Recipe) ModernistRecipe {
+	return ModernistRecipe{
+		Title:    recipe.Title,
+		Portions: recipe.Portions,
+		Source:   recipe.Source,
+		Tags:     recipe.Tags,
+		Steps: []Step{
+			Step{
+				Ingredients:  recipe.Ingredients,
+				Instructions: recipe.Content,
+			},
+		},
+	}
+}
+
 type YamlParser struct{}
 
 func (y YamlParser) ReadRecipe(id Id) (ModernistRecipe, error) {
