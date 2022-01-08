@@ -1,6 +1,7 @@
 package apsa
 
 import (
+	"io/ioutil"
 	"strings"
 )
 
@@ -20,11 +21,17 @@ func parseTags(line string) []string {
 
 type MarkdownParser struct{}
 
-func (p MarkdownParser) ReadRecipe(id Id) (Recipe, error) {
-	content, err := readRecipe(id)
+func (m MarkdownParser) ReadRecipe(id Id) (Recipe, error) {
+	content, err := m.readRecipe(id)
 	TryLogError(err)
-	recipe := p.Parse(string(id), content)
+	recipe := m.Parse(string(id), content)
 	return recipe, err
+}
+
+// Load the content of a given recipe from disk.
+func (p MarkdownParser) readRecipe(id Id) (string, error) {
+	result, err := ioutil.ReadFile(Config.KnowledgeDirectory + string(id) + ".md")
+	return string(result), err
 }
 
 // Parse the tags in the given recipe content.  The format of a recipe is

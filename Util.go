@@ -2,7 +2,6 @@ package apsa
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 )
 
@@ -15,12 +14,6 @@ func TryLogError(err interface{}) {
 	if err != nil {
 		LogError(err)
 	}
-}
-
-// Load the content of a given recipe from disk.
-func readRecipe(id Id) (string, error) {
-	result, err := ioutil.ReadFile(Config.KnowledgeDirectory + string(id) + ".md")
-	return string(result), err
 }
 
 // Compute the combined size of all files in a given directory.
