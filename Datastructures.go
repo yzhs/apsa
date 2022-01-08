@@ -79,8 +79,11 @@ type Recipe struct {
 }
 
 type Results struct {
+	// Recipes contains the recipes to be displayed.
 	Recipes []Recipe
-	// How many results there were all in all; can be significantly larger than len(Ids).
+
+	// Total number of results there were all in all; can be significantly
+	// larger than the number of Recipes
 	Total int
 }
 
