@@ -5,20 +5,6 @@ import (
 	"strings"
 )
 
-// Parsing
-
-// Parse a comma separated list of tags into a slice.
-func parseTags(line string) []string {
-	var tags []string
-	for _, tag := range strings.Split(line, ",") {
-		tmp := strings.TrimSpace(tag)
-		if tmp != "" {
-			tags = append(tags, tmp)
-		}
-	}
-	return tags
-}
-
 type MarkdownParser struct{}
 
 func (m MarkdownParser) ReadRecipe(id Id) (Recipe, error) {
@@ -150,4 +136,17 @@ func extractIngredients(otherLines []string) ([]string, int) {
 		}
 	}
 	return ingredients, lastIngredientLine
+}
+
+// parseTags splits a comma separated list of tags and returns a slice of the
+// individual tags.
+func parseTags(line string) []string {
+	var tags []string
+	for _, tag := range strings.Split(line, ",") {
+		tmp := strings.TrimSpace(tag)
+		if tmp != "" {
+			tags = append(tags, tmp)
+		}
+	}
+	return tags
 }
