@@ -99,17 +99,17 @@ func (c Controller) queryHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	numMatches := len(results.Ids)
+	numMatches := len(results.Recipes)
 
-	for i, recipe := range results.Ids {
+	for i, recipe := range results.Recipes {
 		html := blackfriday.MarkdownCommon([]byte(recipe.Content))
 		if err != nil {
 			panic(err)
 		}
-		results.Ids[i].HTML = template.HTML(html)
+		results.Recipes[i].HTML = template.HTML(html)
 	}
 	data := Result{
-		Query: query, NumMatches: numMatches, Matches: results.Ids[:min(20, numMatches)],
+		Query: query, NumMatches: numMatches, Matches: results.Recipes[:min(20, numMatches)],
 		TotalMatches: results.Total,
 	}
 	renderTemplate(w, "search", data)
