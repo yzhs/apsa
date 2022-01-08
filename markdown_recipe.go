@@ -18,6 +18,15 @@ func parseTags(line string) []string {
 	return tags
 }
 
+type MarkdownParser struct{}
+
+func (p MarkdownParser) ReadRecipe(id Id) (Recipe, error) {
+	content, err := readRecipe(id)
+	TryLogError(err)
+	recipe := p.Parse(string(id), content)
+	return recipe, err
+}
+
 // Parse the tags in the given recipe content.  The format of a recipe is
 // generally of the following form:
 //
@@ -48,7 +57,7 @@ func parseTags(line string) []string {
 //	Zutaten:
 //	* Wasser
 //	Zubereitung...
-func Parse(id, doc string) Recipe {
+func (MarkdownParser) Parse(id, doc string) Recipe {
 	lines := strings.Split(doc, "\n")
 	title, metadata, otherLines := extractMetadata(lines)
 

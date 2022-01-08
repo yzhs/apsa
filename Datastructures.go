@@ -42,6 +42,10 @@ type Statistics interface {
 	Size() int64
 }
 
+type Backend interface {
+	ReadRecipe(id Id) (Recipe, error)
+}
+
 // Configuration data of Apsa
 type Configuration struct {
 	// How many processes may run in parallel when rendering
@@ -95,5 +99,5 @@ func InitConfig() {
 }
 
 func NewSearchEngine() SearchEngine {
-	return Bleve{}
+	return Bleve{MarkdownParser{}}
 }

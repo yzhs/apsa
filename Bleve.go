@@ -12,7 +12,9 @@ import (
 	"github.com/blevesearch/bleve/analysis/analyzer/simple"
 )
 
-type Bleve struct{}
+type Bleve struct {
+	Backend Backend
+}
 
 func touch(file string) error {
 	now := time.Now()
@@ -123,7 +125,7 @@ func createIndex() bleve.Index {
 }
 
 // Search the swish index for a given query.
-func searchBleve(queryString string) (Results, error) {
+func (b Bleve) SearchBleve(queryString string) (Results, error) {
 	index, err := openIndex()
 	if err != nil {
 		LogError(err)
@@ -157,9 +159,8 @@ func searchBleve(queryString string) (Results, error) {
 	var ids []Recipe
 	for _, match := range searchResults.Hits {
 		id := Id(match.ID)
-		content, err := readRecipe(id)
+		recipe, err := b.Backend.ReadRecipe(id)
 		TryLogError(err)
-		recipe := Parse(string(id), content)
 		ids = append(ids, recipe)
 	}
 
@@ -167,8 +168,8 @@ func searchBleve(queryString string) (Results, error) {
 }
 
 // Search return a list of all recipes matching the given query.
-func (Bleve) Search(query string) (Results, error) {
-	results, err := searchBleve(query)
+func (b Bleve) Search(query string) (Results, error) {
+	results, err := b.SearchBleve(query)
 	if err != nil {
 		return Results{}, err
 	}
