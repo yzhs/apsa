@@ -32,7 +32,7 @@ func FromRecipe(recipe Recipe) ModernistRecipe {
 		Source:   recipe.Source,
 		Tags:     recipe.Tags,
 		Steps: []Step{
-			Step{
+			{
 				Ingredients:  recipe.Ingredients,
 				Instructions: strings.Split(recipe.Content, "\n\n"),
 			},
