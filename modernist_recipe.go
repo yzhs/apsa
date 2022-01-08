@@ -9,6 +9,7 @@ import (
 // ModernistRecipe describes a recipe with Modernist Cuisine-style steps grouped
 // together with ingredients needed for that step.
 type ModernistRecipe struct {
+	Id       Id
 	Title    string   `yaml:"title"`
 	Portions string   `yaml:"portions"`
 	Source   string   `yaml:"source"`
@@ -24,6 +25,7 @@ type Step struct {
 
 func FromRecipe(recipe Recipe) ModernistRecipe {
 	return ModernistRecipe{
+		Id:       recipe.Id,
 		Title:    recipe.Title,
 		Portions: recipe.Portions,
 		Source:   recipe.Source,
