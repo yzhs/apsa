@@ -24,7 +24,7 @@ type Step struct {
 
 type YamlParser struct{}
 
-func (y YamlParser) ReadRecipe(id Id) (Recipe, error) {
+func (y YamlParser) ReadRecipe(id Id) (ModernistRecipe, error) {
 	content, err := y.readRecipe(id)
 	TryLogError(err)
 	recipe := y.Parse(id, content)
@@ -36,9 +36,8 @@ func (m YamlParser) readRecipe(id Id) ([]byte, error) {
 	return ioutil.ReadFile(Config.KnowledgeDirectory + string(id) + ".yaml")
 }
 
-func (YamlParser) Parse(id Id, doc []byte) Recipe {
-	var recipe Recipe
+func (YamlParser) Parse(id Id, doc []byte) ModernistRecipe {
+	var recipe ModernistRecipe
 	yaml.Unmarshal(doc, recipe)
-	recipe.Id = id
 	return recipe
 }
