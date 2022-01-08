@@ -2,6 +2,7 @@ package apsa
 
 import (
 	"io/ioutil"
+	"strings"
 
 	"gopkg.in/yaml.v2"
 )
@@ -19,7 +20,7 @@ type ModernistRecipe struct {
 
 // Step consisting of ingredients
 type Step struct {
-	Instructions string   `yaml:"instructions"`
+	Instructions []string `yaml:"instructions"`
 	Ingredients  []string `yaml:"ingredients"`
 }
 
@@ -33,7 +34,7 @@ func FromRecipe(recipe Recipe) ModernistRecipe {
 		Steps: []Step{
 			Step{
 				Ingredients:  recipe.Ingredients,
-				Instructions: recipe.Content,
+				Instructions: strings.Split(recipe.Content, "\n\n"),
 			},
 		},
 	}
