@@ -22,7 +22,7 @@ func touch(file string) error {
 }
 
 // BuildIndex generates a new index or updates the documents in an existing one.
-func (Bleve) BuildIndex() error {
+func (b Bleve) BuildIndex() error {
 	// TODO handle multiple fields, i.e. the main text, @source, @type, tags, etc.
 	newIndex := false
 
@@ -65,10 +65,8 @@ func (Bleve) BuildIndex() error {
 		}
 
 		// Load and parse the recipe content
-		contentBytes, err := ioutil.ReadFile(Config.KnowledgeDirectory + file.Name())
+		recipe, err := b.Backend.ReadRecipe(Id(id))
 		TryLogError(err)
-		content := string(contentBytes)
-		recipe := Parse(id, content)
 
 		err = batch.Index(id, recipe)
 		TryLogError(err)
@@ -156,15 +154,15 @@ func (b Bleve) SearchBleve(queryString string) (Results, error) {
 		return Results{}, err
 	}
 
-	var ids []Recipe
+	var recipes []ModernistRecipe
 	for _, match := range searchResults.Hits {
 		id := Id(match.ID)
 		recipe, err := b.Backend.ReadRecipe(id)
 		TryLogError(err)
-		ids = append(ids, recipe)
+		recipes = append(recipes, FromRecipe(recipe))
 	}
 
-	return Results{ids[:len(searchResults.Hits)], int(searchResults.Total)}, nil
+	return Results{recipes[:len(searchResults.Hits)], int(searchResults.Total)}, nil
 }
 
 // Search return a list of all recipes matching the given query.
@@ -174,7 +172,7 @@ func (b Bleve) Search(query string) (Results, error) {
 		return Results{}, err
 	}
 	n := len(results.Recipes)
-	recipes := make([]Recipe, n)
+	recipes := make([]ModernistRecipe, n)
 	i := 0
 	for _, recipe := range results.Recipes {
 		if _, err := os.Stat(Config.KnowledgeDirectory + string(recipe.Id) + ".md"); os.IsNotExist(err) {

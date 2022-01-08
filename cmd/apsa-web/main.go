@@ -12,7 +12,6 @@ import (
 	"strings"
 
 	flag "github.com/ogier/pflag"
-	"github.com/russross/blackfriday"
 
 	backend "github.com/yzhs/apsa"
 )
@@ -51,7 +50,7 @@ func loadHTMLTemplate(name string) ([]byte, error) {
 
 type Result struct {
 	Query        string
-	Matches      []backend.Recipe
+	Matches      []backend.ModernistRecipe
 	NumMatches   int
 	TotalMatches int
 }
@@ -101,13 +100,6 @@ func (c Controller) queryHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	numMatches := len(results.Recipes)
 
-	for i, recipe := range results.Recipes {
-		html := blackfriday.MarkdownCommon([]byte(recipe.Content))
-		if err != nil {
-			panic(err)
-		}
-		results.Recipes[i].HTML = template.HTML(html)
-	}
 	data := Result{
 		Query: query, NumMatches: numMatches, Matches: results.Recipes[:min(20, numMatches)],
 		TotalMatches: results.Total,
