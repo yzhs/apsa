@@ -1,11 +1,12 @@
 package apsa
 
 import (
-	"io/ioutil"
 	"strings"
 )
 
-type MarkdownParser struct{}
+type MarkdownParser struct {
+	fileReader FileReader
+}
 
 func (m MarkdownParser) ReadRecipe(id Id) (Recipe, error) {
 	content, err := m.readRecipe(id)
@@ -16,7 +17,7 @@ func (m MarkdownParser) ReadRecipe(id Id) (Recipe, error) {
 
 // Load the content of a given recipe from disk.
 func (p MarkdownParser) readRecipe(id Id) (string, error) {
-	result, err := ioutil.ReadFile(Config.KnowledgeDirectory + string(id) + ".md")
+	result, err := p.fileReader.ReadFile(Config.KnowledgeDirectory + string(id) + ".md")
 	return string(result), err
 }
 

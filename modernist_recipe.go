@@ -1,7 +1,6 @@
 package apsa
 
 import (
-	"io/ioutil"
 	"strings"
 
 	"gopkg.in/yaml.v2"
@@ -40,7 +39,9 @@ func FromRecipe(recipe Recipe) ModernistRecipe {
 	}
 }
 
-type YamlParser struct{}
+type YamlParser struct {
+	fileReader FileReader
+}
 
 func (y YamlParser) ReadRecipe(id Id) (ModernistRecipe, error) {
 	content, err := y.readRecipe(id)
@@ -50,8 +51,8 @@ func (y YamlParser) ReadRecipe(id Id) (ModernistRecipe, error) {
 }
 
 // Load the content of a given recipe from disk.
-func (m YamlParser) readRecipe(id Id) ([]byte, error) {
-	return ioutil.ReadFile(Config.KnowledgeDirectory + string(id) + ".yaml")
+func (y YamlParser) readRecipe(id Id) ([]byte, error) {
+	return y.fileReader.ReadFile(Config.KnowledgeDirectory + string(id) + ".yaml")
 }
 
 func (YamlParser) Parse(id Id, doc []byte) ModernistRecipe {
