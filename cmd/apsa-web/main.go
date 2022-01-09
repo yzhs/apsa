@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	flag "github.com/ogier/pflag"
+	"github.com/russross/blackfriday"
 
 	backend "github.com/yzhs/apsa"
 )
@@ -61,6 +62,10 @@ var funcMap = template.FuncMap{
 			return template.HTML("<a href=\"" + x + "\">" + x + "</a>")
 		}
 		return template.HTML(template.HTMLEscapeString(x))
+	},
+	"markdown": func(x string) template.HTML {
+		r := blackfriday.MarkdownCommon([]byte(x))
+		return template.HTML(r)
 	},
 }
 
