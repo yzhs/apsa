@@ -30,7 +30,7 @@ func (c Controller) statsHandler(w http.ResponseWriter, r *http.Request) {
 // Handle the edit-link, causing the browser to open that recipe in an editor.
 func editHandler(w http.ResponseWriter, r *http.Request) {
 	headers := w.Header()
-	headers["Content-Type"] = []string{"application/x-backend-edit"}
+	headers["Content-Type"] = []string{"application/x-apsa-edit"}
 	id := r.FormValue("id")
 	fmt.Fprint(w, id)
 }
