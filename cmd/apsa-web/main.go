@@ -32,7 +32,7 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 	headers := w.Header()
 	headers["Content-Type"] = []string{"application/x-backend-edit"}
 	id := r.FormValue("id")
-	fmt.Fprintf(w, id)
+	fmt.Fprint(w, id)
 }
 
 // Serve the search page.
