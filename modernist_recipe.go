@@ -59,6 +59,7 @@ func (y YamlParser) readRecipe(id Id) ([]byte, error) {
 func (YamlParser) Parse(id Id, doc []byte) ModernistRecipe {
 	var recipe ModernistRecipe
 	yaml.Unmarshal(doc, &recipe)
+	recipe.Id = id
 	return recipe
 }
 
