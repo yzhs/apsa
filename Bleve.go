@@ -176,8 +176,10 @@ func (b Bleve) Search(query string) (Results, error) {
 	i := 0
 	for _, recipe := range results.Recipes {
 		if _, err := os.Stat(Config.KnowledgeDirectory + string(recipe.Id) + ".md"); os.IsNotExist(err) {
-			RemoveFromIndex(recipe.Id)
-			continue
+			if _, err = os.Stat(Config.KnowledgeDirectory + string(recipe.Id) + ".yaml"); os.IsNotExist(err) {
+				RemoveFromIndex(recipe.Id)
+				continue
+			}
 		}
 		recipes[i] = recipe
 		i += 1
