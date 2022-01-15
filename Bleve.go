@@ -2,6 +2,7 @@ package apsa
 
 import (
 	"io/ioutil"
+	"log"
 	"os"
 	"path"
 	"strings"
@@ -188,6 +189,7 @@ func (b Bleve) Search(query string) (Results, error) {
 	i := 0
 	for _, recipe := range results.Recipes {
 		if !b.Backend.RecipeExists(recipe.Id) {
+			log.Printf("Could not find file for recipe %s. Removing it from the index.\n", recipe.Id)
 			RemoveFromIndex(recipe.Id)
 			continue
 		}
