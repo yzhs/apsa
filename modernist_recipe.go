@@ -20,6 +20,7 @@ type ModernistRecipe struct {
 
 // Step consisting of ingredients
 type Step struct {
+	Title        *string  `yaml:"title"`
 	Ingredients  []string `yaml:"ingredients"`
 	Instructions string   `yaml:"instructions"`
 }
