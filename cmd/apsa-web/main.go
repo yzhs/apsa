@@ -8,7 +8,6 @@ import (
 	"net"
 	"net/http"
 	"os"
-	"runtime/pprof"
 	"strings"
 
 	flag "github.com/ogier/pflag"
@@ -117,22 +116,12 @@ func serveDirectory(prefix string, directory string) {
 }
 
 func main() {
-	var profile, version bool
+	var version bool
 	flag.BoolVarP(&version, "version", "v", false, "\tShow version")
-	flag.BoolVar(&profile, "profile", false, "\tEnable profiler")
 	flag.Parse()
 
 	backend.InitConfig()
 	backend.Config.MaxResults = 20
-
-	if profile {
-		f, err := os.Create("apsa.prof")
-		if err != nil {
-			panic(err)
-		}
-		pprof.StartCPUProfile(f)
-		defer pprof.StopCPUProfile()
-	}
 
 	if version {
 		fmt.Println(backend.NAME, backend.VERSION)
