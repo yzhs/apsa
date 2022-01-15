@@ -22,36 +22,7 @@ func (p MarkdownParser) readRecipe(id Id) (string, error) {
 	return string(result), err
 }
 
-// Parse the tags in the given recipe content.  The format of a recipe is
-// generally of the following form:
-//
-//	# Titel
-//	Quelle: http://...
-//	Backzeit: 23 min
-//	Wartezeit: 15 min
-//	Zubereitungszeit: 2h + 5min
-//	Ober- und Unterhitze: 200
-//	Umluft: 180
-//	Tags: Gemüse, lecker, gesund
-//	Portionen: 4
-//	## Teilrezept 1
-//	Zutaten:
-//	* 1 Rotkohl
-//	* 2 EL Zucker
-//	* Salz
-//	Zubereitung...
-//
-//	## Teilrezept 2
-//	* Rosinen
-//	* Schokopudding
-//	Zubereitung...
-//
-// oder
-//	[...]
-//	Portionen: 4
-//	Zutaten:
-//	* Wasser
-//	Zubereitung...
+// Parse the tags in the given recipe content.
 func (MarkdownParser) Parse(id, doc string) Recipe {
 	lines := strings.Split(doc, "\n")
 	title, metadata, otherLines := extractMetadata(lines)
