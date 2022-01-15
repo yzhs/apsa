@@ -175,7 +175,11 @@ func (b Bleve) SearchBleve(queryString string) (Results, error) {
 	for _, match := range searchResults.Hits {
 		id := Id(match.ID)
 		recipe, err := b.Backend.ReadRecipe(id)
-		TryLogError(err)
+		if err != nil {
+			log.Println("Error reading recipe:", err)
+			recipe.Id = id
+		}
+
 		recipes = append(recipes, recipe)
 	}
 
