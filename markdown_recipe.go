@@ -1,6 +1,7 @@
 package apsa
 
 import (
+	"os"
 	"strings"
 )
 
@@ -150,4 +151,9 @@ func parseTags(line string) []string {
 		}
 	}
 	return tags
+}
+
+func (MarkdownParser) RecipeExists(id Id) bool {
+	_, err := os.Stat(Config.KnowledgeDirectory + string(id) + ".md")
+	return !os.IsNotExist(err)
 }

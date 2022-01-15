@@ -192,12 +192,12 @@ func (b Bleve) Search(query string) (Results, error) {
 			continue
 		}
 		ids[recipe.Id] = true
-		//if _, err := os.Stat(Config.KnowledgeDirectory + string(recipe.Id) + ".md"); os.IsNotExist(err) {
-		//	if _, err = os.Stat(Config.KnowledgeDirectory + string(recipe.Id) + ".yaml"); os.IsNotExist(err) {
-		//		RemoveFromIndex(recipe.Id)
-		//		continue
-		//	}
-		//}
+
+		if !b.Backend.RecipeExists(recipe.Id) {
+			RemoveFromIndex(recipe.Id)
+			continue
+		}
+
 		recipes[i] = recipe
 		i += 1
 	}

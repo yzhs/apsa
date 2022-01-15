@@ -62,9 +62,18 @@ func (YamlParser) Parse(id Id, doc []byte) ModernistRecipe {
 	return recipe
 }
 
+func (YamlParser) RecipeExists(id Id) bool {
+	_, err := os.Stat(Config.KnowledgeDirectory + string(id) + ".yaml")
+	return !os.IsNotExist(err)
+}
+
 type DefaultBackend struct {
 	markdown MarkdownParser
 	yaml     YamlParser
+}
+
+func (b DefaultBackend) RecipeExists(id Id) bool {
+	return b.yaml.RecipeExists(id) || b.markdown.RecipeExists(id)
 }
 
 func (b DefaultBackend) ReadRecipe(id Id) (ModernistRecipe, error) {

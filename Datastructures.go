@@ -44,6 +44,7 @@ type Statistics interface {
 
 type Backend interface {
 	ReadRecipe(id Id) (ModernistRecipe, error)
+	RecipeExists(id Id) bool
 }
 
 // Configuration data of Apsa
