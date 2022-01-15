@@ -102,5 +102,5 @@ func InitConfig() {
 }
 
 func NewSearchEngine() SearchEngine {
-	return Bleve{MarkdownParser{}}
+	return Bleve{MarkdownParser{FileReaderImpl{}}}
 }
