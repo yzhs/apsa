@@ -12,6 +12,7 @@ import (
 
 	"github.com/blevesearch/bleve/analysis/analyzer/keyword"
 	"github.com/blevesearch/bleve/analysis/analyzer/simple"
+	_ "github.com/blevesearch/bleve/analysis/lang/de"
 )
 
 type Bleve struct {
@@ -109,7 +110,7 @@ func openIndex() (bleve.Index, error) {
 
 func createIndex() bleve.Index {
 	textMapping := bleve.NewTextFieldMapping()
-	textMapping.Analyzer = "en"
+	textMapping.Analyzer = "de"
 
 	simpleMapping := bleve.NewTextFieldMapping()
 	simpleMapping.Analyzer = simple.Name
@@ -128,7 +129,7 @@ func createIndex() bleve.Index {
 	recipeMapping.AddSubDocumentMapping("steps", stepsMapping)
 
 	mapping := bleve.NewIndexMapping()
-	mapping.DefaultAnalyzer = "en"
+	mapping.DefaultAnalyzer = "de"
 	mapping.DefaultMapping = recipeMapping
 
 	index, err := bleve.New(Config.ApsaDirectory+"bleve", mapping)
