@@ -185,14 +185,8 @@ func (b Bleve) Search(query string) (Results, error) {
 	}
 	n := len(results.Recipes)
 	recipes := make([]ModernistRecipe, n)
-	ids := make(map[Id]bool)
 	i := 0
 	for _, recipe := range results.Recipes {
-		if _, exists := ids[recipe.Id]; exists {
-			continue
-		}
-		ids[recipe.Id] = true
-
 		if !b.Backend.RecipeExists(recipe.Id) {
 			RemoveFromIndex(recipe.Id)
 			continue
