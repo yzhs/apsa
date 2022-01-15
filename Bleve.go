@@ -108,8 +108,8 @@ func openIndex() (bleve.Index, error) {
 }
 
 func createIndex() bleve.Index {
-	enTextMapping := bleve.NewTextFieldMapping()
-	enTextMapping.Analyzer = "en"
+	textMapping := bleve.NewTextFieldMapping()
+	textMapping.Analyzer = "en"
 
 	simpleMapping := bleve.NewTextFieldMapping()
 	simpleMapping.Analyzer = simple.Name
@@ -117,11 +117,15 @@ func createIndex() bleve.Index {
 	typeMapping := bleve.NewTextFieldMapping()
 	typeMapping.Analyzer = keyword.Name
 
+	stepsMapping := bleve.NewDocumentMapping()
+	stepsMapping.AddFieldMappingsAt("instructions", textMapping)
+
 	recipeMapping := bleve.NewDocumentMapping()
 	recipeMapping.AddFieldMappingsAt("id", simpleMapping)
-	recipeMapping.AddFieldMappingsAt("content", enTextMapping)
+	recipeMapping.AddFieldMappingsAt("content", textMapping)
 	recipeMapping.AddFieldMappingsAt("source", simpleMapping)
-	recipeMapping.AddFieldMappingsAt("tag", simpleMapping)
+	recipeMapping.AddFieldMappingsAt("tags", simpleMapping)
+	recipeMapping.AddSubDocumentMapping("steps", stepsMapping)
 
 	mapping := bleve.NewIndexMapping()
 	mapping.DefaultAnalyzer = "en"
