@@ -43,7 +43,7 @@ type Statistics interface {
 }
 
 type Backend interface {
-	ReadRecipe(id Id) (Recipe, error)
+	ReadRecipe(id Id) (ModernistRecipe, error)
 }
 
 // Configuration data of Apsa
@@ -102,5 +102,10 @@ func InitConfig() {
 }
 
 func NewSearchEngine() SearchEngine {
-	return Bleve{MarkdownParser{FileReaderImpl{}}}
+	return Bleve{
+		DefaultBackend{
+			MarkdownParser{FileReaderImpl{}},
+			YamlParser{FileReaderImpl{}},
+		},
+	}
 }

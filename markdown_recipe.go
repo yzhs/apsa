@@ -8,11 +8,11 @@ type MarkdownParser struct {
 	fileReader FileReader
 }
 
-func (m MarkdownParser) ReadRecipe(id Id) (Recipe, error) {
+func (m MarkdownParser) ReadRecipe(id Id) (ModernistRecipe, error) {
 	content, err := m.readRecipe(id)
 	TryLogError(err)
 	recipe := m.Parse(string(id), content)
-	return recipe, err
+	return FromRecipe(recipe), err
 }
 
 // Load the content of a given recipe from disk.

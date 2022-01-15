@@ -3,6 +3,7 @@ package apsa
 import (
 	"io/ioutil"
 	"os"
+	"path"
 	"strings"
 	"time"
 
@@ -59,7 +60,18 @@ func (b Bleve) BuildIndex() error {
 			LogError(err)
 			continue
 		}
-		id := strings.TrimSuffix(file.Name(), ".md")
+
+		filename := file.Name()
+		extension := path.Ext(filename)
+		var id string
+		if extension == ".md" {
+			id = strings.TrimSuffix(filename, ".md")
+		} else if extension == ".yaml" {
+			id = strings.TrimSuffix(filename, ".yaml")
+		} else {
+			continue
+		}
+
 		if modTime < indexUpdateTime && !newIndex {
 			continue
 		}
@@ -159,7 +171,7 @@ func (b Bleve) SearchBleve(queryString string) (Results, error) {
 		id := Id(match.ID)
 		recipe, err := b.Backend.ReadRecipe(id)
 		TryLogError(err)
-		recipes = append(recipes, FromRecipe(recipe))
+		recipes = append(recipes, recipe)
 	}
 
 	return Results{recipes[:len(searchResults.Hits)], int(searchResults.Total)}, nil
@@ -173,14 +185,19 @@ func (b Bleve) Search(query string) (Results, error) {
 	}
 	n := len(results.Recipes)
 	recipes := make([]ModernistRecipe, n)
+	ids := make(map[Id]bool)
 	i := 0
 	for _, recipe := range results.Recipes {
-		if _, err := os.Stat(Config.KnowledgeDirectory + string(recipe.Id) + ".md"); os.IsNotExist(err) {
-			if _, err = os.Stat(Config.KnowledgeDirectory + string(recipe.Id) + ".yaml"); os.IsNotExist(err) {
-				RemoveFromIndex(recipe.Id)
-				continue
-			}
+		if _, exists := ids[recipe.Id]; exists {
+			continue
 		}
+		ids[recipe.Id] = true
+		//if _, err := os.Stat(Config.KnowledgeDirectory + string(recipe.Id) + ".md"); os.IsNotExist(err) {
+		//	if _, err = os.Stat(Config.KnowledgeDirectory + string(recipe.Id) + ".yaml"); os.IsNotExist(err) {
+		//		RemoveFromIndex(recipe.Id)
+		//		continue
+		//	}
+		//}
 		recipes[i] = recipe
 		i += 1
 	}

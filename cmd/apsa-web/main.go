@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"io"
 	"io/ioutil"
+	"log"
 	"net"
 	"net/http"
 	"os"
@@ -76,7 +77,10 @@ func renderTemplate(w io.Writer, templateName string, resultData Result) {
 		return
 	}
 	err = t.ExecuteTemplate(w, templateName+".html", resultData)
-	backend.TryLogError(err)
+	log.Printf("%+v\n", resultData)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func min(a, b int) int {
