@@ -40,11 +40,3 @@ func getModTime(file string) (int64, error) {
 	}
 	return info.ModTime().Unix(), nil
 }
-
-// Cache the newest modification of the template files as a Unix time
-// (i.e. seconds since 1970-01-01).
-var templatesModTime int64 = -1
-
-// All recognized template files
-// TODO Generate the list⁈
-var templateFiles = []string{"header.html", "footer.html"}
