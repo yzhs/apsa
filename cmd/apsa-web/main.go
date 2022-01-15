@@ -77,7 +77,6 @@ func renderTemplate(w io.Writer, templateName string, resultData Result) {
 		return
 	}
 	err = t.ExecuteTemplate(w, templateName+".html", resultData)
-	log.Printf("%+v\n", resultData)
 	if err != nil {
 		log.Fatal(err)
 	}
