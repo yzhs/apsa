@@ -15,3 +15,5 @@ require (
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0
 )
+
+replace github.com/willf/bitset => github.com/bits-and-blooms/bitset v1.1.11
