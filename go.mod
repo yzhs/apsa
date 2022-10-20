@@ -17,7 +17,7 @@ require (
 	github.com/jmhodges/levigo v1.0.0 // indirect
 	github.com/ogier/pflag v0.0.1
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
-	github.com/russross/blackfriday v1.5.2
+	github.com/russross/blackfriday v1.6.0
 	github.com/tecbot/gorocksdb v0.0.0-20191217155057-f0fad39f321c // indirect
 	github.com/tinylib/msgp v1.1.2 // indirect
 	github.com/willf/bitset v1.1.11 // indirect
