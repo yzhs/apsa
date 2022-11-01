@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"runtime/pprof"
 	"strings"
 
 	flag "github.com/ogier/pflag"
@@ -29,15 +28,6 @@ func main() {
 
 	apsa.InitConfig()
 	apsa.Config.MaxResults = 1e9
-
-	if profile {
-		f, err := os.Create("apsa.prof")
-		if err != nil {
-			panic(err)
-		}
-		pprof.StartCPUProfile(f)
-		defer pprof.StopCPUProfile()
-	}
 
 	searchEngine := apsa.NewSearchEngine()
 
