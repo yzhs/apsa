@@ -17,7 +17,7 @@ import (
 	backend "github.com/yzhs/apsa"
 )
 
-const SocketPath = "/tmp/apsa.sock"
+const SocketPath = "/var/run/apsa/apsa.sock"
 
 // Send the statistics page to the client.
 func (c Controller) statsHandler(w http.ResponseWriter, r *http.Request) {
