@@ -3,7 +3,7 @@ module github.com/yzhs/apsa
 go 1.15
 
 require (
-	github.com/RoaringBitmap/roaring v1.9.2 // indirect
+	github.com/RoaringBitmap/roaring v1.9.3 // indirect
 	github.com/bits-and-blooms/bitset v1.13.0 // indirect
 	github.com/blevesearch/bleve v1.0.14
 	github.com/blevesearch/mmap-go v1.0.4 // indirect
