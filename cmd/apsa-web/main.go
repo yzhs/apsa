@@ -108,7 +108,7 @@ func (c Controller) queryHandler(w http.ResponseWriter, r *http.Request) {
 	numMatches := len(results.Recipes)
 
 	data := Result{
-		Query: query, NumMatches: numMatches, Matches: results.Recipes[:min(20, numMatches)],
+		Query: query, NumMatches: numMatches, Matches: results.Recipes[:min(100, numMatches)],
 		TotalMatches: results.Total,
 	}
 	renderTemplate(w, "search", data)
@@ -124,7 +124,7 @@ func main() {
 	flag.Parse()
 
 	backend.InitConfig()
-	backend.Config.MaxResults = 20
+	backend.Config.MaxResults = 100
 
 	if version {
 		fmt.Println(backend.NAME, backend.VERSION)
