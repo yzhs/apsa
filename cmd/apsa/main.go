@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"net/url"
 	"os"
 	"os/exec"
 	"strings"
@@ -21,20 +20,7 @@ func printStats(s apsa.SearchEngine) {
 
 func import_from_urls(urls []string) {
 	for _, recipeUrl := range urls {
-		if !strings.HasPrefix(recipeUrl, "http") {
-			apsa.LogError(fmt.Sprintf("Could not import recipe from '%s'. Not recognized as an HTTP URL.", recipeUrl))
-			continue
-		}
-
-		u, err := url.Parse(recipeUrl)
-		if err != nil {
-			apsa.LogError(fmt.Sprintf("Could not import recipe from '%s'. Not recognized as an HTTP URL.", recipeUrl))
-			continue
-		}
-
-		hostname := strings.TrimPrefix(u.Hostname(), "www.")
-
-		cmd := exec.Command("apsa-import-"+hostname, recipeUrl)
+		cmd := exec.Command("apsa-import", recipeUrl)
 		apsa.TryLogError(cmd.Run())
 	}
 }
